@@ -12,7 +12,7 @@ function startBot() {
     host: '9GSMP2026-2027.aternos.me', // Thay bằng IP server của bạn (Ví dụ: abc.aternos.me)
     port: 25476,                     // Thay bằng số Port nếu có, không có thì giữ nguyên 25565
     username: 'anhhuydeptrai',    // Tên con bot bạn muốn đặt
-    version: "26.2"                  
+    version: "1.21.11"                  
   });
 
   bot.on('spawn', () => {
