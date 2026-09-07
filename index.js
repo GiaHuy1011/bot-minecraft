@@ -7,7 +7,9 @@ app.get('/', (req, res) => {
   res.send('Bot Minecraft tu dong do tim IP dang chay 24/7!');
 });
 app.listen(process.env.PORT || 3000);
-const hostName = '9GSMP2026-2027.aternos.me';
+
+const hostName = '9GSMP2026-2027.aternos.me'; 
+
 function getIPAndStartBot() {
   dns.resolve4(hostName, (err, addresses) => {
     if (err || !addresses || addresses.length === 0) {
