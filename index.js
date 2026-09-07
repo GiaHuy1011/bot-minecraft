@@ -4,26 +4,28 @@ const dns = require('dns');
 const app = express();
 
 app.get('/', (req, res) => {
-  res.send('Bot Minecraft tu dong do tim IP dang chay 24/7!');
+  res.send('Bot MegaSMP 2026 tu dong quet IP dang chay 24/7!');
 });
 app.listen(process.env.PORT || 3000);
 
+// Thong tin thuc te tu anh Aternos cua ban
 const hostName = '9GSMP2026-2027.aternos.me'; 
+const serverPort = 25476;
 
 function getIPAndStartBot() {
   dns.resolve4(hostName, (err, addresses) => {
     if (err || !addresses || addresses.length === 0) {
-      console.log('Khong the tim thay IP server, dang thu lai sau 15 giay...');
+      console.log('Chua tim thay IP server, dang quet lai sau 15 giay...');
       setTimeout(getIPAndStartBot, 15000);
       return;
     }
     
     const realIP = addresses[0];
-    console.log(`Da tim thay IP thuc te hien tai cua Server: ${realIP}`);
+    console.log(`Da tim thay IP thuc te cua Server: ${realIP}`);
     
     const bot = mineflayer.createBot({
       host: realIP,
-      port: 25475, 
+      port: serverPort, 
       username: 'MegaSMP_Bot2026',
       version: "26.2"
     });
@@ -31,6 +33,7 @@ function getIPAndStartBot() {
     bot.on('spawn', () => {
       console.log('Bot da vao server thanh cong va dang giu server ON 24/7!');
       
+      // Hanh dong chong kick AFK cua Aternos
       setInterval(() => {
         if (bot.entity) {
           bot.setControlState('jump', true);
@@ -44,11 +47,11 @@ function getIPAndStartBot() {
     });
 
     bot.on('end', () => {
-      console.log('Bot bi ngat ket noi! Tien hanh quet lai IP va ket noi lai sau 15 giay...');
+      console.log('Bot bi ngat ket noi! Dang tien hanh quet lai IP sau 15 giay...');
       setTimeout(getIPAndStartBot, 15000);
     });
 
-    bot.on('error', (err) => console.log('Loi: ', err));
+    bot.on('error', (err) => console.log('Loi he thong: ', err));
   });
 }
 
