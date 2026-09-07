@@ -8,7 +8,7 @@ app.get('/', (req, res) => {
 });
 app.listen(process.env.PORT || 3000);
 
-const hostName = '9GSMP2026 2027.aternos.me'; 
+const hostName = '9GSMP2026-2027.aternos.me:25476'; 
 
 function getIPAndStartBot() {
   dns.resolve4(hostName, (err, addresses) => {
