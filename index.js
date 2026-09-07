@@ -27,7 +27,7 @@ function getIPAndStartBot() {
       host: realIP,
       port: serverPort, 
       username: 'MegaSMP_Bot2026',
-      version: "26.2"
+      version: "1.21.11"
     });
 
     bot.on('spawn', () => {
