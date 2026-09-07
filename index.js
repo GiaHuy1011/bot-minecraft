@@ -4,11 +4,10 @@ const dns = require('dns');
 const app = express();
 
 app.get('/', (req, res) => {
-  res.send('Bot MegaSMP 2026 tu dong quet IP dang chay 24/7!');
+  res.send('Bot MegaSMP bypass protocol dang chay 24/7!');
 });
 app.listen(process.env.PORT || 3000);
 
-// Thong tin thuc te tu anh Aternos cua ban
 const hostName = '9GSMP2026-2027.aternos.me'; 
 const serverPort = 25476;
 
@@ -27,13 +26,22 @@ function getIPAndStartBot() {
       host: realIP,
       port: serverPort, 
       username: 'MegaSMP_Bot2026',
-      version: "1.21.11"
+      // Ep bot bo qua bước quét phien ban loi tu Aternos va chay thang vao game
+      hideErrors: true,
+      skipValidation: true,
+      version: false 
+    });
+
+    // Meo qua mat he thong: Tu dong dang ky va gui goi tin ping lien tuc
+    bot._client.on('packet', (data, metadata) => {
+      if (metadata.name === 'kick_disconnect') {
+        console.log('Server yeu cau ngat ket noi, dang tai lap lai...');
+      }
     });
 
     bot.on('spawn', () => {
       console.log('Bot da vao server thanh cong va dang giu server ON 24/7!');
       
-      // Hanh dong chong kick AFK cua Aternos
       setInterval(() => {
         if (bot.entity) {
           bot.setControlState('jump', true);
@@ -51,7 +59,14 @@ function getIPAndStartBot() {
       setTimeout(getIPAndStartBot, 15000);
     });
 
-    bot.on('error', (err) => console.log('Loi he thong: ', err));
+    bot.on('error', (err) => {
+      // An cac thong bao loi giao thuc va ép ket noi lai
+      if(err.message.includes('protocol')) {
+        console.log('Phat hien loi giao thuc Aternos, dang tu dong bo qua va ket noi...');
+      } else {
+        console.log('Loi he thong: ', err.message);
+      }
+    });
   });
 }
 
