@@ -1,42 +1,55 @@
 const mineflayer = require('mineflayer');
 const express = require('express');
+const dns = require('dns');
 const app = express();
 
 app.get('/', (req, res) => {
-  res.send('Bot Minecraft dang chay 24/7!');
+  res.send('Bot Minecraft tu dong do tim IP dang chay 24/7!');
 });
 app.listen(process.env.PORT || 3000);
 
-function startBot() {
-  const bot = mineflayer.createBot({
-    host: '9GSMP2026-2027.aternos.me', // Thay bằng IP server của bạn (Ví dụ: abc.aternos.me)
-    port: 25476,                     // Thay bằng số Port nếu có, không có thì giữ nguyên 25565
-    username: 'anhhuydeptrai',    // Tên con bot bạn muốn đặt
-    version: "1.21.11"                  
-  });
+const hostName = '9GSMP2026 2027.aternos.me'; 
 
-  bot.on('spawn', () => {
-    console.log('Bot da vao server thanh cong!');
+function getIPAndStartBot() {
+  dns.resolve4(hostName, (err, addresses) => {
+    if (err || !addresses || addresses.length === 0) {
+      console.log('Khong the tim thay IP server, dang thu lai sau 15 giay...');
+      setTimeout(getIPAndStartBot, 15000);
+      return;
+    }
     
-    // Cu 30 giay bot tu nhay va xoay nguoi de khong bi kick AFK
-    setInterval(() => {
-      if (bot.entity) {
-        bot.setControlState('jump', true);
-        setTimeout(() => bot.setControlState('jump', false), 500);
-        
-        const yaw = Math.random() * Math.PI * 2;
-        const pitch = (Math.random() - 0.5) * Math.PI;
-        bot.look(yaw, pitch);
-      }
-    }, 30000); 
-  });
+    const realIP = addresses[0];
+    console.log(`Da tim thay IP thuc te hien tai cua Server: ${realIP}`);
+    
+    const bot = mineflayer.createBot({
+      host: realIP,
+      port: 25475, 
+      username: 'MegaSMP_Bot2026',
+      version: "26.2"
+    });
 
-  bot.on('end', () => {
-    console.log('Bot mat ket noi! Dang thu lai sau 15 giay...');
-    setTimeout(startBot, 15000);
-  });
+    bot.on('spawn', () => {
+      console.log('Bot da vao server thanh cong va dang giu server ON 24/7!');
+      
+      setInterval(() => {
+        if (bot.entity) {
+          bot.setControlState('jump', true);
+          setTimeout(() => bot.setControlState('jump', false), 500);
+          
+          const yaw = Math.random() * Math.PI * 2;
+          const pitch = (Math.random() - 0.5) * Math.PI;
+          bot.look(yaw, pitch);
+        }
+      }, 30000);
+    });
 
-  bot.on('error', (err) => console.log('Loi: ', err));
+    bot.on('end', () => {
+      console.log('Bot bi ngat ket noi! Tien hanh quet lai IP va ket noi lai sau 15 giay...');
+      setTimeout(getIPAndStartBot, 15000);
+    });
+
+    bot.on('error', (err) => console.log('Loi: ', err));
+  });
 }
 
-startBot();
+getIPAndStartBot();
