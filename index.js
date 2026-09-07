@@ -49,7 +49,7 @@ function getIPAndStartBot() {
           
           const yaw = Math.random() * Math.PI * 2;
           const pitch = (Math.random() - 0.5) * Math.PI;
-          bot.look(yaw, pitch);
+          bot.look(yaw, pitch)
         }
       }, 30000);
     });
