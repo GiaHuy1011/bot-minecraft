@@ -4,7 +4,7 @@ const dns = require('dns');
 const app = express();
 
 app.get('/', (req, res) => {
-  res.send('Bot MegaSMP di chuyen lien tuc dang chay 24/7!');
+  res.send('Bot MegaSMP di chuyen Vanilla dang chay 24/7!');
 });
 app.listen(process.env.PORT || 3000);
 
@@ -28,35 +28,39 @@ function getIPAndStartBot() {
       username: 'MegaSMP_Bot2026',
       hideErrors: true,
       skipValidation: true,
-      version: false 
+      version: false,
+      // BAT BUOC: Bat tinh nang doc thong tin map de server Vanilla khong kick vi hack di chuyen
+      physicsEnabled: true 
     });
 
     bot.on('spawn', () => {
-      console.log('Bot da vao server va bat dau chu ky di chuyen chong AFK!');
+      console.log('Bot da vao server Vanilla va dang bat dau chu ky di chuyen!');
       
-      // Vong lap tu dong di chuyen tien - lui mai mai
-      setInterval(() => {
-        if (!bot.entity) return;
+      // Cho bot doi 3 giay de tai xong map chung quanh roi moi bat dau di chuyen
+      setTimeout(() => {
+        setInterval(() => {
+          if (!bot.entity) return;
 
-        // 1. Cho bot di tien ve phia truoc trong 0.6 giay (~2 block)
-        bot.setControlState('forward', true);
-        
-        setTimeout(() => {
-          bot.setControlState('forward', false); // Dung lai
+          // Cho bot di tien len 0.5 giay
+          bot.setControlState('forward', true);
           
-          // 2. Doi 1 giay roi bat dau di lui ve phia sau trong 0.6 giay
           setTimeout(() => {
-            bot.setControlState('back', true);
+            bot.setControlState('forward', false); // Dung lai
             
+            // Doi 1 giay roi di lui ve vi tri cu 0.5 giay
             setTimeout(() => {
-              bot.setControlState('back', false); // Dung lai va ket thuc chu ky
-            }, 600);
+              bot.setControlState('back', true);
+              
+              setTimeout(() => {
+                bot.setControlState('back', false); // Dung lai hoan toan
+              }, 500);
+              
+            }, 1000);
             
-          }, 1000);
-          
-        }, 600);
+          }, 500);
 
-      }, 10000); // Cu sau moi 10 giay bot se thuc hien hanh dong di chuyen mot lan
+        }, 15000); // Thuc hien chu ky sau moi 15 giay
+      }, 3000);
     });
 
     bot.on('end', () => {
